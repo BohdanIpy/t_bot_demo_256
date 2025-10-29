@@ -1,6 +1,10 @@
 package product
 
-import tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+import (
+	"github.com/BohdanIpy/bot_256_demo/internal/app/commands/commerce/product"
+	"github.com/BohdanIpy/bot_256_demo/internal/service/commerce/product"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+)
 
 type ProductCommander interface {
 	Help(inputMsg *tgbotapi.Message)
@@ -13,8 +17,13 @@ type ProductCommander interface {
 }
 
 func NewProductCommander(bot *tgbotapi.BotAPI, service *service.ProductService) *ProductCommander {
-	return &ProductComandImpl{}
+	return &ProductComanderImpl{
+		bot:            bot,
+		productService: product.NewDummyProductService,
+	}
 }
 
-type ProductComandImpl struct {
+type ProductComanderImpl struct {
+	bot            *tgbotapi.BotAPI
+	productService *product.ProductService
 }
