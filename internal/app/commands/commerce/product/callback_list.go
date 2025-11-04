@@ -13,7 +13,7 @@ type CallbackListData struct {
 	Offset int `json:"offset"`
 }
 
-func (c *ProductComanderImpl) CallbackList(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
+func (p *ProductComander) CallbackList(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	parsedData := CallbackListData{}
 	err := json.Unmarshal([]byte(callbackPath.CallbackData), &parsedData)
 	if err != nil {
@@ -26,7 +26,7 @@ func (c *ProductComanderImpl) CallbackList(callback *tgbotapi.CallbackQuery, cal
 		callback.Message.Chat.ID,
 		fmt.Sprintf("Parsed: %+v\n", parsedData),
 	)
-	_, err = c.bot.Send(msg)
+	_, err = p.bot.Send(msg)
 	if err != nil {
 		log.Printf("DemoSubdomainCommander.CallbackList: error sending reply message to chat - %v", err)
 	}

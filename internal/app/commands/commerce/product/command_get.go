@@ -7,7 +7,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func (c *ProductComanderImpl) Get(inputMessage *tgbotapi.Message) {
+func (p *ProductComander) Get(inputMessage *tgbotapi.Message) {
 	args := inputMessage.CommandArguments()
 
 	idx, err := strconv.Atoi(args)
@@ -16,7 +16,7 @@ func (c *ProductComanderImpl) Get(inputMessage *tgbotapi.Message) {
 		return
 	}
 
-	product, err := c.productService.Get(idx)
+	product, err := p.productService.List(0, 1)
 	if err != nil {
 		log.Printf("fail to get product with idx %d: %v", idx, err)
 		return
@@ -24,10 +24,10 @@ func (c *ProductComanderImpl) Get(inputMessage *tgbotapi.Message) {
 
 	msg := tgbotapi.NewMessage(
 		inputMessage.Chat.ID,
-		product.Title,
+		product[0].Title,
 	)
 
-	_, err = c.bot.Send(msg)
+	_, err = p.bot.Send(msg)
 	if err != nil {
 		log.Printf("DemoSubdomainCommander.Get: error sending reply message to chat - %v", err)
 	}

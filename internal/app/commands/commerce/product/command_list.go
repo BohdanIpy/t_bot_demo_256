@@ -8,10 +8,14 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
-func (c *ProductComanderImpl) List(inputMessage *tgbotapi.Message) {
+func (p *ProductComander) List(inputMessage *tgbotapi.Message) {
 	outputMsgText := "Here all the products: \n\n"
 
-	products := c.productService.List()
+	products, err := p.productService.List(0, 1)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 	for _, p := range products {
 		outputMsgText += p.Title
 		outputMsgText += "\n"
@@ -36,7 +40,7 @@ func (c *ProductComanderImpl) List(inputMessage *tgbotapi.Message) {
 		),
 	)
 
-	_, err := c.bot.Send(msg)
+	_, err = p.bot.Send(msg)
 	if err != nil {
 		log.Printf("DemoSubdomainCommander.List: error sending reply message to chat - %v", err)
 	}

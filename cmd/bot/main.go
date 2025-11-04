@@ -4,22 +4,26 @@ import (
 	"log"
 	"os"
 
-	"github.com/BohdanIpy/bot_256_demo/internal/app/commands"
-	"github.com/BohdanIpy/bot_256_demo/internal/service/product"
+	routerPkg "github.com/BohdanIpy/bot_256_demo/internal/app/router"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 )
 
 func main() {
+	_ = godotenv.Load()
 
-	if err := godotenv.Load(); err != nil {
-		log.Fatal(err)
+	token, found := os.LookupEnv("TELEGRAM_APITOKEN")
+	if !found {
+		log.Panic("environment variable TOKEN not found in .env")
 	}
 
-	bot, err := tgbotapi.NewBotAPI(os.Getenv("TELEGRAM_APITOKEN"))
+	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		log.Panic(err)
 	}
+
+	// Uncomment if you want debugging
+	// bot.Debug = true
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
@@ -28,15 +32,13 @@ func main() {
 	}
 
 	updates := bot.GetUpdatesChan(u)
+	if err != nil {
+		log.Panic(err)
+	}
 
-	comander := commands.NewCommandRouter(bot, product.NewService())
-	comander.AddHandler("help", (*commands.Comander).Help)
-	comander.AddHandler("list", (*commands.Comander).List)
-	comander.AddHandler("help", (*commands.Comander).Help)
-	comander.AddHandler("get", (*commands.Comander).GetById)
+	routerHandler := routerPkg.NewRouter(bot)
 
 	for update := range updates {
-		// log.Printf("username - %s", update.Message.Chat.UserName)
-		comander.HandleUpdateMsg(update)
+		routerHandler.HandleUpdate(update)
 	}
 }
