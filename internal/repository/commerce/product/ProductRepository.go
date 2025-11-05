@@ -7,9 +7,9 @@ import (
 type Repository interface {
 	GetProducts() ([]commerce.Product, error)
 	GetProductsPaginated(offset, limit uint64) ([]commerce.Product, error)
-	GetProductById(id int64) (*commerce.Product, bool, error)
+	GetProductById(id uint64) (*commerce.Product, bool, error)
 	GetProductByTitle(title string) (*commerce.Product, bool)
 	CreateProduct(product commerce.Product) error
-	PatchProduct(id int64, updates map[string]interface{}) (*commerce.Product, error)
-	DeleteProduct(id int64) (bool, error)
+	PatchProduct(id uint64, updates map[string]interface{}) (*commerce.Product, error)
+	DeleteProduct(id uint64) (bool, error)
 }

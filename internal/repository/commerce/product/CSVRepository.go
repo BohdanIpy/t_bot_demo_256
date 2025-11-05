@@ -23,11 +23,11 @@ func convertLinesIntoProduct(line []string) (*commerce.Product, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &commerce.Product{Id: num, Title: line[1]}, nil
+	return &commerce.Product{Id: uint64(num), Title: line[1]}, nil
 }
 
 func convertProductIntoLines(product commerce.Product) []string {
-	return []string{strconv.Itoa(product.Id), product.Title}
+	return []string{strconv.Itoa(int(product.Id)), product.Title}
 }
 
 func readCSVFile(path string) ([]commerce.Product, error) {
@@ -152,7 +152,7 @@ func (c *CSVRepository) PatchProduct(id int64, updates map[string]interface{}) (
 			for k, v := range updates {
 				switch strings.ToLower(k) {
 				case "id":
-					product.Id = v.(int)
+					product.Id = v.(uint64)
 				case "title":
 					product.Title = v.(string)
 				}

@@ -3,7 +3,7 @@ package product
 import "fmt"
 
 type Product struct {
-	Id    int
+	Id    uint64
 	Title string
 }
 

@@ -76,7 +76,7 @@ func (p *ProductRepository) PatchProduct(id int64, updates map[string]interface{
 			for k, v := range updates {
 				switch strings.ToLower(k) {
 				case "id":
-					product.Id = v.(int)
+					product.Id = v.(uint64)
 				case "title":
 					product.Title = v.(string)
 				}
@@ -129,7 +129,7 @@ func seedData(count uint) []commerce.Product {
 	products := make([]commerce.Product, 0, count)
 	for i := uint(0); i < count; i++ {
 		products = append(products, commerce.Product{
-			Id:    int(i),
+			Id:    uint64(i),
 			Title: getString(int64(rand.Intn(14))),
 		})
 	}
