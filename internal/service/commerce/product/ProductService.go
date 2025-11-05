@@ -31,8 +31,16 @@ func (d *ProductService) Describe(productID uint64) (*commerce.Product, error) {
 	return elem, err
 }
 
+func (d *ProductService) ListUnpaged() ([]commerce.Product, error) {
+	return d.repo.GetProducts()
+}
+
 func (d *ProductService) List(cursosr uint64, limit uint64) ([]commerce.Product, error) {
 	return d.repo.GetProductsPaginated(cursosr, limit)
+}
+
+func (d *ProductService) GetNumberOfElements() int64 {
+	return d.repo.GetNumberOfElements()
 }
 
 func (d *ProductService) Create(product commerce.Product) (uint64, error) {

@@ -22,6 +22,7 @@ func NewProductCommander(bot *tgbotapi.BotAPI, repo rp.Repository) *ProductComan
 	}
 }
 
+// for the dynamic keyboard
 func (p *ProductComander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {
 	switch callbackPath.CallbackName {
 	case "list":

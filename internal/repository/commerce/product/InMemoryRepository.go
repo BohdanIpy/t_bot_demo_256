@@ -108,6 +108,10 @@ func (p *ProductRepository) DeleteProduct(id uint64) (bool, error) {
 	return true, nil
 }
 
+func (p *ProductRepository) GetNumberOfElements() int64 {
+	return int64(len(p.InMemoryStorage))
+}
+
 func NewProductRepository() *ProductRepository {
 	return &ProductRepository{
 		InMemoryStorage: seedData(23),

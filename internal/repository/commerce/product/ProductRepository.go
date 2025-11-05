@@ -12,4 +12,5 @@ type Repository interface {
 	CreateProduct(product commerce.Product) error
 	PatchProduct(id uint64, updates map[string]interface{}) (*commerce.Product, error)
 	DeleteProduct(id uint64) (bool, error)
+	GetNumberOfElements() int64
 }

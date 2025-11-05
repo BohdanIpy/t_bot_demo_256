@@ -37,12 +37,15 @@ func (c *Router) HandleUpdate(update tgbotapi.Update) {
 
 	switch {
 	case update.CallbackQuery != nil:
+		// callback query
 		c.handleCallback(update.CallbackQuery)
 	case update.Message != nil:
-		c.handleMessage(update.Message)
+		// command
+		c.handleCommand(update.Message)
 	}
 }
 
+// interface
 func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 	callbackPath, err := path.ParseCallback(callback.Data)
 	if err != nil {
@@ -58,10 +61,10 @@ func (c *Router) handleCallback(callback *tgbotapi.CallbackQuery) {
 	}
 }
 
-func (c *Router) handleMessage(msg *tgbotapi.Message) {
+// HandleCommand
+func (c *Router) handleCommand(msg *tgbotapi.Message) {
 	if !msg.IsCommand() {
 		c.showCommandFormat(msg)
-
 		return
 	}
 

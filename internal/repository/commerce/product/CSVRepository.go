@@ -79,6 +79,10 @@ func (c *CSVRepository) Close() {
 	writer.Flush()
 }
 
+func (c *CSVRepository) GetNumberOfElements() int64 {
+	return int64(len(c.Products))
+}
+
 func NewCSVRepository(path string) (*CSVRepository, error) {
 	products, err := readCSVFile(path)
 	if err != nil {
