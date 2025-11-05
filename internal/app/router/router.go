@@ -6,6 +6,8 @@ import (
 
 	commerce "github.com/BohdanIpy/bot_256_demo/internal/app/commands/commerce"
 	"github.com/BohdanIpy/bot_256_demo/internal/app/path"
+	rp "github.com/BohdanIpy/bot_256_demo/internal/repository/commerce/product"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -19,10 +21,10 @@ type Router struct {
 	commerceCommander Commander
 }
 
-func NewRouter(bot *tgbotapi.BotAPI) *Router {
+func NewRouter(bot *tgbotapi.BotAPI, repo rp.Repository) *Router {
 	return &Router{
 		bot:               bot,
-		commerceCommander: commerce.NewCommerceCommander(bot),
+		commerceCommander: commerce.NewCommerceCommander(bot, repo),
 	}
 }
 

@@ -5,6 +5,7 @@ import (
 
 	"github.com/BohdanIpy/bot_256_demo/internal/app/commands/commerce/product"
 	"github.com/BohdanIpy/bot_256_demo/internal/app/path"
+	rp "github.com/BohdanIpy/bot_256_demo/internal/repository/commerce/product"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -18,10 +19,10 @@ type CommerceCommander struct {
 	productCommander Commander
 }
 
-func NewCommerceCommander(bot *tgbotapi.BotAPI) *CommerceCommander {
+func NewCommerceCommander(bot *tgbotapi.BotAPI, repo rp.Repository) *CommerceCommander {
 	return &CommerceCommander{
 		bot:              bot,
-		productCommander: product.NewProductCommander(bot),
+		productCommander: product.NewProductCommander(bot, repo),
 	}
 }
 
@@ -36,7 +37,7 @@ func (c *CommerceCommander) HandleCallback(callback *tgbotapi.CallbackQuery, cal
 
 func (c *CommerceCommander) HandleCommand(message *tgbotapi.Message, commandPath path.CommandPath) {
 	switch commandPath.Subdomain {
-	case "subdomain":
+	case "product":
 		c.productCommander.HandleCommand(message, commandPath)
 	default:
 		log.Printf("DemoCommander.HandleCommand: unknown subdomain - %s", commandPath.Subdomain)

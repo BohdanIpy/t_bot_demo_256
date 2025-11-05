@@ -113,11 +113,11 @@ func (c *CSVRepository) GetProductsPaginated(offset, limit uint64) ([]commerce.P
 	return result, nil
 }
 
-func (c *CSVRepository) GetProductById(id int64) (*commerce.Product, bool, error) {
+func (c *CSVRepository) GetProductById(id uint64) (*commerce.Product, bool, error) {
 	c.RWMtx.RLock()
 	defer c.RWMtx.RUnlock()
 	for i := range c.Products {
-		if int64(c.Products[i].Id) == id {
+		if c.Products[i].Id == id {
 			return &c.Products[i], true, nil
 		}
 	}
@@ -142,12 +142,12 @@ func (c *CSVRepository) CreateProduct(product commerce.Product) error {
 	return nil
 }
 
-func (c *CSVRepository) PatchProduct(id int64, updates map[string]interface{}) (*commerce.Product, error) {
+func (c *CSVRepository) PatchProduct(id uint64, updates map[string]interface{}) (*commerce.Product, error) {
 	c.RWMtx.Lock()
 	defer c.RWMtx.Unlock()
 
 	for i := range c.Products {
-		if int64(c.Products[i].Id) == id {
+		if c.Products[i].Id == id {
 			product := &c.Products[i]
 			for k, v := range updates {
 				switch strings.ToLower(k) {
@@ -163,16 +163,16 @@ func (c *CSVRepository) PatchProduct(id int64, updates map[string]interface{}) (
 	return nil, errors.New("product not found")
 }
 
-func (c *CSVRepository) getProductIndex(id int64) int {
+func (c *CSVRepository) getProductIndex(id uint64) int {
 	for i, v := range c.Products {
-		if int64(v.Id) == id {
+		if v.Id == id {
 			return i
 		}
 	}
 	return -1
 }
 
-func (c *CSVRepository) DeleteProduct(id int64) (bool, error) {
+func (c *CSVRepository) DeleteProduct(id uint64) (bool, error) {
 	c.RWMtx.Lock()
 	defer c.RWMtx.Unlock()
 

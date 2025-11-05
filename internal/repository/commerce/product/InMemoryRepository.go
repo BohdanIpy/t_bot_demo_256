@@ -37,11 +37,11 @@ func (p *ProductRepository) GetProductsPaginated(offset, limit uint64) ([]commer
 	return result, nil
 }
 
-func (p *ProductRepository) GetProductById(id int64) (*commerce.Product, bool, error) {
+func (p *ProductRepository) GetProductById(id uint64) (*commerce.Product, bool, error) {
 	p.RWMtx.RLock()
 	defer p.RWMtx.RUnlock()
 	for i := range p.InMemoryStorage {
-		if int64(p.InMemoryStorage[i].Id) == id {
+		if p.InMemoryStorage[i].Id == id {
 			return &p.InMemoryStorage[i], true, nil
 		}
 	}
@@ -66,12 +66,12 @@ func (p *ProductRepository) CreateProduct(product commerce.Product) error {
 	return nil
 }
 
-func (p *ProductRepository) PatchProduct(id int64, updates map[string]interface{}) (*commerce.Product, error) {
+func (p *ProductRepository) PatchProduct(id uint64, updates map[string]interface{}) (*commerce.Product, error) {
 	p.RWMtx.Lock()
 	defer p.RWMtx.Unlock()
 
 	for i := range p.InMemoryStorage {
-		if int64(p.InMemoryStorage[i].Id) == id {
+		if p.InMemoryStorage[i].Id == id {
 			product := &p.InMemoryStorage[i]
 			for k, v := range updates {
 				switch strings.ToLower(k) {
@@ -87,16 +87,16 @@ func (p *ProductRepository) PatchProduct(id int64, updates map[string]interface{
 	return nil, errors.New("product not found")
 }
 
-func (p *ProductRepository) getProductIndex(id int64) int {
+func (p *ProductRepository) getProductIndex(id uint64) int {
 	for i, v := range p.InMemoryStorage {
-		if int64(v.Id) == id {
+		if v.Id == id {
 			return i
 		}
 	}
 	return -1
 }
 
-func (p *ProductRepository) DeleteProduct(id int64) (bool, error) {
+func (p *ProductRepository) DeleteProduct(id uint64) (bool, error) {
 	p.RWMtx.Lock()
 	defer p.RWMtx.Unlock()
 

@@ -4,6 +4,7 @@ import (
 	"log"
 
 	"github.com/BohdanIpy/bot_256_demo/internal/app/path"
+	rp "github.com/BohdanIpy/bot_256_demo/internal/repository/commerce/product"
 	"github.com/BohdanIpy/bot_256_demo/internal/service/commerce/product"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
@@ -13,15 +14,12 @@ type ProductComander struct {
 	productService product.ProductService
 }
 
-func NewProductCommander(bot *tgbotapi.BotAPI) *ProductComander {
-	panic("TODO")
-	/*
-		service := product.NewDummyProductService()
-		return &ProductComander{
-			bot:            bot,
-			productService: service,
-		}
-	*/
+func NewProductCommander(bot *tgbotapi.BotAPI, repo rp.Repository) *ProductComander {
+	service := product.NewProductService(repo)
+	return &ProductComander{
+		bot:            bot,
+		productService: *service,
+	}
 }
 
 func (p *ProductComander) HandleCallback(callback *tgbotapi.CallbackQuery, callbackPath path.CallbackPath) {

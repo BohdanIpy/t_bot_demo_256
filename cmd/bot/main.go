@@ -5,6 +5,7 @@ import (
 	"os"
 
 	routerPkg "github.com/BohdanIpy/bot_256_demo/internal/app/router"
+	rp "github.com/BohdanIpy/bot_256_demo/internal/repository/commerce/product"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
 )
@@ -36,7 +37,13 @@ func main() {
 		log.Panic(err)
 	}
 
-	routerHandler := routerPkg.NewRouter(bot)
+	repo := rp.NewProductRepository()
+	//repo2, err := rp.NewCSVRepository("pth")
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+	routerHandler := routerPkg.NewRouter(bot, repo)
+	//routerHandler2 := routerPkg.NewRouter(bot, repo2)
 
 	for update := range updates {
 		routerHandler.HandleUpdate(update)
